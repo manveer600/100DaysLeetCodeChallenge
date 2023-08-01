@@ -1,0 +1,61 @@
+# QUESTION 8:- Remove K Digits
+# DESCRIPTION:- Given a string s, remove duplicate letters so that every letter appears once and only once. You must make sure your result is the smallest in lexicographical order
+ among all possible results.Given string num representing a non-negative integer num, and an integer k, return the smallest possible integer after removing k digits from num.
+# EXAMPLE1:-
+  Input: num = "1432219", k = 3
+  Output: "1219"
+  Explanation: Remove the three digits 4, 3, and 2 to form the new number 1219 which is the smallest.
+
+# EXAMPLE2:-
+  Input: num = "10200", k = 1
+  Output: "200"
+  Explanation: Remove the leading 1 and the number is 200. Note that the output must not contain leading zeroes.
+
+
+# SOLUTION 8:- 
+class Solution {
+public:
+    string removeKdigits(string num, int k) {
+        if(num.size() <= k){
+            return "0";
+        }
+        stack<char> st;
+        string s="";
+        for(int i = 0 ; i < num.size() ; i++){
+
+            while(k> 0 && !st.empty() && st.top() > num[i]){
+                st.pop();
+                k--;
+            }
+
+            st.push(num[i]);
+        }
+        
+        while(k > 0 && !st.empty()){
+            st.pop();
+            k--;
+        }
+
+
+        while(!st.empty()){
+            s.push_back(st.top());
+            st.pop();
+        }
+
+
+        reverse(s.begin(),s.end());
+
+        int i = 0 ;
+        while(i < s.size() && s[i] == '0'){
+            i++ ;
+        }
+        s = s.substr(i);
+        if(s.empty()){
+            return "0";
+        }
+        else{
+            return s;
+        }
+        return s;
+    }
+};
