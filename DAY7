@@ -1,0 +1,56 @@
+# QUESTION 10- Minimum Window Substring
+# DESCRIPTION:-Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
+The testcases will be generated such that the answer is unique.
+# EXAMPLE1:-
+  Input: s = "ADOBECODEBANC", t = "ABC"
+  Output: "BANC"
+  Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+
+# EXAMPLE2:-
+  Input: s = "a", t = "a"
+  Output: "a"
+  Explanation: The entire string s is the minimum window.
+
+# SOLUTION 1O:- 
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        unordered_map<char, int> counter_t, counter_window;
+    for (char c : t) {
+        counter_t[c]++;
+    }
+
+    int left = 0, right = 0;
+    int min_length = INT_MAX;
+    int min_left = 0;
+    int required_chars = counter_t.size();
+    int formed_chars = 0;
+
+    while (right < s.length()) {
+        char c = s[right];
+        counter_window[c]++;
+        if (counter_t.find(c) != counter_t.end() && counter_window[c] == counter_t[c]) {
+            formed_chars++;
+        }
+
+        while (formed_chars == required_chars && left <= right) {
+            int current_length = right - left + 1;
+            if (current_length < min_length) {
+                min_length = current_length;
+                min_left = left;
+            }
+
+            char left_char = s[left];
+            counter_window[left_char]--;
+            if (counter_t.find(left_char) != counter_t.end() && counter_window[left_char] < counter_t[left_char]) {
+                formed_chars--;
+            }
+
+            left++;
+        }
+
+        right++;
+    }
+return min_length == INT_MAX ? "" : s.substr(min_left, min_length);
+    }
+};
