@@ -1,0 +1,105 @@
+# QUESTION 11- Third Max Number
+# DESCRIPTION:- Given an integer array nums, return the third distinct maximum number in this array. If the third maximum does not exist, return the maximum number.
+# EXAMPLE1:-
+  Input: nums = [3,2,1]
+  Output: 1
+  Explanation:
+  The first distinct maximum is 3.
+  The second distinct maximum is 2.
+  The third distinct maximum is 1.
+
+
+# Input: nums = [1,2]
+  Output: 2
+  Explanation:
+  The first distinct maximum is 2.
+  The second distinct maximum is 1.
+  The third distinct maximum does not exist, so the maximum (2) is returned instead.
+
+
+# SOLUTION 11:- 
+class Solution {
+public:
+   class Solution {
+public:
+    int thirdMax(vector<int>& nums) {
+        map<int,int> count;
+
+        for(int i = 0; i < nums.size() ; i++){
+            count[nums[i]]++;
+        }
+
+        priority_queue<int>pq;
+
+        for(auto number : count){
+            pq.push(number.first);
+        }
+
+        if(count.size() < 3){
+            return pq.top() ;
+        }
+        else{        
+            int k = 2 ;
+        while(k>0){
+            
+            pq.pop();
+            k-- ;
+        }
+
+        return pq.top();
+        }
+    }
+};
+
+
+
+
+# QUESTION 12:- Merge Strings Alternately
+# DESCRIPTION:- You are given two strings word1 and word2. Merge the strings by adding letters in alternating order, starting with word1. If a string is longer than the other, append the additional letters onto the end of the merged string.
+Return the merged string.
+# EXAMPLE1:-
+  Input: word1 = "abc", word2 = "pqr"
+  Output: "apbqcr"
+  Explanation: The merged string will be merged as so:
+  word1:  a   b   c
+  word2:    p   q   r
+  merged: a p b q c r
+
+
+# DESCRIPTION:- 
+  Input: word1 = "ab", word2 = "pqrs"
+  Output: "apbqrs"
+  Explanation: Notice that as word2 is longer, "rs" is appended to the end.
+  word1:  a   b 
+  word2:    p   q   r   s
+  merged: a p b q   r   s
+
+
+# SOLUTION 12:- 
+class Solution {
+public:
+    string mergeAlternately(string word1, string word2) {
+        int i = 0 ;
+        int j = 0 ;
+        string result ;
+
+        while(i < word1.size() && j < word2.size()){
+            result.push_back(word1[i]);
+            i++;
+            result.push_back(word2[j]);
+            j++;
+        }
+
+        while(i<word1.size()){
+            result.push_back(word1[i]);
+            i++;
+        }
+
+        while(j < word2.size()){
+            result.push_back(word2[j]);
+            j++;
+        }
+
+        return result;
+    }
+};
