@@ -1,0 +1,187 @@
+# QUESTION 14:- Count the Number of Vowel Strings in Range
+# DESCRIPTION:- You are given a 0-indexed array of string words and two integers left and right.
+A string is called a vowel string if it starts with a vowel character and ends with a vowel character where vowel characters are 'a', 'e', 'i', 'o', and 'u'.
+Return the number of vowel strings words[i] where i belongs to the inclusive range [left, right].
+
+# EXAMPLE1:-
+  Input: words = ["are","amy","u"], left = 0, right = 2
+  Output: 2
+  Explanation: 
+  - "are" is a vowel string because it starts with 'a' and ends with 'e'.
+  - "amy" is not a vowel string because it does not end with a vowel.
+  - "u" is a vowel string because it starts with 'u' and ends with 'u'.
+  The number of vowel strings in the mentioned range is 2.
+
+# EXAMPLE2:-
+  Input: words = ["hey","aeo","mu","ooo","artro"], left = 1, right = 4
+  Output: 3
+  Explanation: 
+  - "aeo" is a vowel string because it starts with 'a' and ends with 'o'.
+  - "mu" is not a vowel string because it does not start with a vowel.
+  - "ooo" is a vowel string because it starts with 'o' and ends with 'o'.
+  - "artro" is a vowel string because it starts with 'a' and ends with 'o'.
+  The number of vowel strings in the mentioned range is 3.
+
+# SOLUTION 14:- 
+class Solution {
+public:
+    bool CheckVowel ( char ch ) { 
+        if ( ch == 'a' ||ch == 'e' || ch == 'i' ||  ch == 'o' ||  ch == 'u' ) return true; 
+        else return false ; 
+    }
+    int vowelStrings(vector<string>& words, int left, int right) {
+        int cnt = 0 ; 
+        for ( int i = left ; i <= right ; i ++ ) { 
+            string s = words[ i ] ; 
+            if ( CheckVowel( s [ 0 ]) && CheckVowel( s [ s.length( ) -1  ]) ) cnt ++ ; 
+        }
+        return cnt ; 
+    }
+};
+
+
+
+# QUESTION 15:-  Find the Difference of Two Arrays
+# DESCRIPTION:- Given two 0-indexed integer arrays nums1 and nums2, return a list answer of size 2 where
+  answer[0] is a list of all distinct integers in nums1 which are not present in nums2.
+  answer[1] is a list of all distinct integers in nums2 which are not present in nums1.
+  Note that the integers in the lists may be returned in any order.
+
+# EXAMPLE1:-
+  Input: nums1 = [1,2,3], nums2 = [2,4,6]
+  Output: [[1,3],[4,6]]
+  Explanation:
+  For nums1, nums1[1] = 2 is present at index 0 of nums2, whereas nums1[0] = 1 and nums1[2] = 3 are not present in nums2. Therefore, answer[0] = [1,3].
+  For nums2, nums2[0] = 2 is present at index 1 of nums1, whereas nums2[1] = 4 and nums2[2] = 6 are not present in nums2. Therefore, answer[1] = [4,6].
+
+# EXAMPLE2:-
+    Input: nums1 = [1,2,3,3], nums2 = [1,1,2,2]
+  Output: [[3],[]]
+  Explanation:
+  For nums1, nums1[2] and nums1[3] are not present in nums2. Since nums1[2] == nums1[3], their value is only included once and answer[0] = [3].
+  Every integer in nums2 is present in nums1. Therefore, answer[1] = [].
+
+# SOLUTION 15:- 
+class Solution {
+public:
+    vector<vector<int>> findDifference(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set <int> count1 (nums1.begin(), nums1.end());
+        unordered_set <int> count2 (nums2.begin(), nums2.end());
+        vector<int> ans;
+        vector<vector<int>> mainAns;
+
+        for(int num : count1){
+            if(count2.find(num) == count2.end()){
+                ans.push_back(num);
+            }
+        }
+
+        mainAns.push_back(ans);
+        ans.clear();
+
+
+        for(int num : count2){
+            if(count1.find(num) == count1.end()){
+                ans.push_back(num);
+            }
+        }
+
+        mainAns.push_back(ans);
+        ans.clear();
+
+        return mainAns;
+
+
+    }
+};
+
+
+
+
+
+# QUESTION 16:-  Rat in a Maze Problem - I
+# DESCRIPTION:- Consider a rat placed at (0, 0) in a square matrix of order N * N. It has to reach the destination at (N - 1, N - 1). Find all possible paths that the rat can take to reach from source to destination. The directions in which the rat can move are 'U'(up), 'D'(down), 'L' (left), 'R' (right). Value 0 at a cell in the matrix represents that it is blocked and rat cannot move to it while value 1 at a cell in the matrix represents that rat can be travel through it.
+Note: In a path, no cell can be visited more than one time. If the source cell is 0, the rat cannot move to any other cell.
+
+# EXAMPLE1:-
+  N = 4
+  m[][] = {{1, 0, 0, 0},
+           {1, 1, 0, 1}, 
+           {1, 1, 0, 0},
+           {0, 1, 1, 1}}
+  Output:
+  DDRDRR DRDDRR
+  Explanation:
+  The rat can reach the destination at 
+  (3, 3) from (0, 0) by two paths - DRDDRR 
+  and DDRDRR, when printed in sorted order 
+  we get DDRDRR DRDDRR.
+
+# Input:
+  N = 2
+  m[][] = {{1, 0},
+           {1, 0}}
+  Output:
+  -1
+  Explanation:
+  No path exists and destination cell is 
+  blocked.
+
+
+# SOLUTION 16:- 
+class Solution{
+    public:
+    bool isSafe(int x, int y, vector<vector<int>>&visited, vector<vector<int>>&m,int n){
+        if((x >= 0 && x< n) && (y >= 0 && y < n) && visited[x][y] != 1 && m[x][y] == 1){
+            visited[x][y] = 1;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    void solve(int x, int y, string path, vector<vector<int>>&m, int n, vector<string>&ans,vector<vector<int>>&visited){
+        // base case
+        if(x == n-1 && y == n-1){
+            ans.push_back(path);
+            return ;
+        }
+        
+        // down
+        if(isSafe(x+1,y,visited,m,n)){
+            solve(x+1,y,path+'D',m,n,ans,visited);
+        }
+        
+        // up
+        if(isSafe(x-1,y,visited,m,n)){
+            solve(x-1,y,path+'U',m,n,ans, visited);
+        }
+        
+        // right
+        if(isSafe(x,y+1,visited,m,n)){
+            solve(x,y+1,path+'R',m,n,ans, visited);
+        }
+        
+        // left
+        if(isSafe(x,y-1,visited,m,n)){
+            solve(x,y-1,path+'L',m,n,ans, visited);
+        }
+        
+        visited[x][y] = 0;
+        
+        
+    }
+    vector<string> findPath(vector<vector<int>> &m, int n) {
+        
+        vector<string>ans;
+        if(m[0][0] == 0){
+            return ans;
+        }
+        
+        vector<vector<int>> visited(n, vector<int>(n,0));
+        solve(0,0,"",m,n,ans,visited);
+        
+        return ans ;
+        
+    }
+};
