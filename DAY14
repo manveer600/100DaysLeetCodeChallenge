@@ -1,0 +1,119 @@
+# QUESTION 22:-  First negative integer in every window of size k
+# DESCRIPTION:- Given an array A[] of size N and a positive integer K, find the first negative integer for each and every window(contiguous subarray) of size K.
+# EXAMPLE1:-
+  Input : 
+  N = 5
+  A[] = {-8, 2, 3, -6, 10}
+  K = 2
+  Output : 
+  -8 0 -6 -6
+  Explanation :
+  First negative integer for each window of size k
+  {-8, 2} = -8
+  {2, 3} = 0 (does not contain a negative integer)
+  {3, -6} = -6
+  {-6, 10} = -6
+
+# EXAMPLE2:-
+  Input : 
+  N = 8
+  A[] = {12, -1, -7, 8, -15, 30, 16, 28}
+  K = 3
+  Output :
+  -1 -1 -7 -15 -15 0 
+
+# SOLUTION 20:- 
+vector<long long> printFirstNegativeInteger(long long int A[],
+                                             long long int N, long long int K) {
+                                                 
+    deque<long long int> dq;
+    vector<long long int>ans;
+    
+    for(int i = 0 ; i < K ; i++){
+        if(A[i]<0){
+            dq.push_back(i);
+        }
+    }
+    
+    
+    if(dq.size() > 0){
+        ans.push_back(A[dq.front()]);
+    }else{
+        ans.push_back(0);
+    }
+    
+    
+    for(int i = K ; i < N ; i++){
+        int window = i-dq.front();
+        if(!dq.empty() && window >= K){
+            dq.pop_front();
+        }
+        if(A[i] < 0){
+            dq.push_back(i);
+        }
+        
+        if(dq.size()>0){
+            ans.push_back(A[dq.front()]);
+        }else{
+            ans.push_back(0);
+        }
+    }
+    return ans;
+
+
+
+
+
+# QUESTION 23:- Sliding Window Maximum
+# DESCRIPTION:- You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
+Return the max sliding window.
+# EXAMPLE1:-
+  Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+  Output: [3,3,5,5,6,7]
+  Explanation: 
+  Window position                Max
+  ---------------               -----
+  [1  3  -1] -3  5  3  6  7       3
+   1 [3  -1  -3] 5  3  6  7       3
+   1  3 [-1  -3  5] 3  6  7       5
+   1  3  -1 [-3  5  3] 6  7       5
+   1  3  -1  -3 [5  3  6] 7       6
+   1  3  -1  -3  5 [3  6  7]      7
+
+# EXAMPLE2:-
+  Input: nums = [1], k = 1
+  Output: [1]
+
+# SOLUTION 21:- 
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        deque<int> dq;
+        vector<int> ans;
+        for(int i = 0 ; i < k ; i++){
+            while(!dq.empty() && nums[i] > nums[dq.back()]){
+                dq.pop_back();
+            }
+
+            dq.push_back(i);
+        }
+
+        for(int i = k ; i < nums.size() ; i++){
+            ans.push_back(nums[dq.front()]);
+
+            int window = i-k;
+            while(!dq.empty() && dq.front() <= i-k ){
+                dq.pop_front() ;
+            }
+
+            while (!dq.empty() && nums[i] >= nums[dq.back()]) {
+                dq.pop_back();
+            }
+            dq.push_back(i);
+        }
+
+        ans.push_back(nums[dq.front()]);
+
+        return ans ;
+    }
+};
