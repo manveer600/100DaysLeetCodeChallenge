@@ -1,0 +1,114 @@
+# QUESTION 24:- Sum Multiples
+# DESCRIPTION:- Given a positive integer n, find the sum of all integers in the range [1, n] inclusive that are divisible by 3, 5, or 7.
+Return an integer denoting the sum of all numbers in the given range satisfying the constraint.
+ 
+# EXAMPLE1:-
+  Input: n = 7
+  Output: 21
+  Explanation: Numbers in the range [1, 7] that are divisible by 3, 5, or 7 are 3, 5, 6, 7. The sum of these numbers is 21.
+
+# EXAMPLE2:-
+  Input: n = 10
+  Output: 40
+  Explanation: Numbers in the range [1, 10] that are divisible by 3, 5, or 7 are 3, 5, 6, 7, 9, 10. The sum of these numbers is 40.
+
+# SOLUTION 24:- 
+class Solution {
+public:
+    int sumOfMultiples(int n) {
+        int sum = 0 ;
+        for(int i = 1 ; i <= n ; i++){
+            if(i % 3 == 0 || i % 5 == 0 || i % 7 == 0){
+                sum += i;
+            }
+        }
+
+        return sum;
+    }
+};
+
+
+
+# QUESTION 25:-  Find Subarrays With Equal Sum
+# DESCRIPTION:- Given a 0-indexed integer array nums, determine whether there exist two subarrays of length 2 with equal sum. Note that the two subarrays must begin at different indices.
+Return true if these subarrays exist, and false otherwise.
+A subarray is a contiguous non-empty sequence of elements within an array.
+
+# EXAMPLE1:-
+  Input: nums = [4,2,4]
+  Output: true
+  Explanation: The subarrays with elements [4,2] and [2,4] have the same sum of 6.
+
+# EXAMPLE2:-
+  Input: nums = [1,2,3,4,5]
+  Output: false
+  Explanation: No two subarrays of size 2 have the same sum.
+
+# SOLUTION 25:- 
+class Solution {
+public:
+    bool findSubarrays(vector<int>& nums) {
+        int n = nums.size();
+        unordered_map<int,int> m;
+
+        for(int i = 0 ; i < n-1 ; i++){
+            int sum = 0 ;
+            sum = nums[i]+nums[i+1];
+
+            m[sum]++;
+
+            if(m[sum] > 1 ){
+                return true;
+            }
+        }
+
+        return false;
+    }
+};
+
+
+
+# QUESTION 26:- Product of Array Except Self
+# DESCRIPTION:- Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
+The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+You must write an algorithm that runs in O(n) time and without using the division operation.
+
+# EXAMPLE1:-
+  Input: nums = [1,2,3,4]
+  Output: [24,12,8,6]
+
+# EXAMPLE2:-
+  Input: nums = [-1,1,0,-3,3]
+  Output: [0,0,9,0,0]
+
+# SOLUTION 26:- 
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int leftProduct = 1;
+        vector<int>left;
+        left.push_back(1);
+        for(int i = 1 ; i < nums.size() ; i++){
+            leftProduct *= nums[i-1];
+            left.push_back(leftProduct);
+        }
+
+        int rightProduct = 1;
+        vector<int> right;
+        right.push_back(1);
+        for(int i = nums.size()-2; i >=0 ; i--){
+            rightProduct *= nums[i+1];
+            right.push_back(rightProduct);
+        }
+
+        reverse(right.begin(),right.end());
+
+        right.clear();
+
+        for(int i = 0 ; i < nums.size() ; i++){
+            right.push_back(left[i]*right[i]);
+        }
+
+        return right;
+    }
+};
