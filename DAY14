@@ -22,7 +22,7 @@
   Output :
   -1 -1 -7 -15 -15 0 
 
-# SOLUTION 20:- 
+# SOLUTION 22:- 
 vector<long long> printFirstNegativeInteger(long long int A[],
                                              long long int N, long long int K) {
                                                  
@@ -84,7 +84,7 @@ Return the max sliding window.
   Input: nums = [1], k = 1
   Output: [1]
 
-# SOLUTION 21:- 
+# SOLUTION 23:- 
 class Solution {
 public:
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
