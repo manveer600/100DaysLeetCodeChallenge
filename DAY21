@@ -1,0 +1,75 @@
+# QUESTION 33:- Integer to Roman
+# DESCRIPTION:- Given an integer, convert it to a roman numeral. 
+# EXAMPLE1:-
+  Input: num = 58
+  Output: "LVIII"
+  Explanation: L = 50, V = 5, III = 3.
+
+# EXAMPLE2:-
+  Input : num = 3
+  Output: "III"
+  Explanation: 3 is represented as 3 ones.
+
+# SOLUTION 33:- 
+class Solution {
+public:
+    string intToRoman(int num) {
+        int val[] = {1000,900,500,400,100,90,60,50,40,10,9,6,5,4,1};
+        string roman[] = {"M","CM","D","CD","C","XC","LX","L","XL","X","IX","VI","V","IV","I"};
+        int i = 0 ;
+        string ans = "";
+        while(num>0){
+            int firstDigit = num/val[i];
+            num = num%val[i];
+            for(int j = 0; j < firstDigit; j++){
+                ans += roman[i];
+            }
+            i++;
+        }
+        return ans;
+    }
+};
+
+
+
+# QUESTION 34:- Top K Frequent Words
+# DESCRIPTION:- Given an array of strings words and an integer k, return the k most frequent strings.
+Return the answer sorted by the frequency from highest to lowest. Sort the words with the same frequency by their lexicographical order.
+# EXAMPLE1:-
+  Input: words = ["i","love","leetcode","i","love","coding"], k = 2
+  Output: ["i","love"]
+  Explanation: "i" and "love" are the two most frequent words.
+  Note that "i" comes before "love" due to a lower alphabetical order.
+
+# EXAMPLE2:-
+  Input: words = ["the","day","is","sunny","the","the","the","sunny","is","is"], k = 4
+  Output: ["the","is","sunny","day"]
+  Explanation: "the", "is", "sunny" and "day" are the four most frequent words, with the number of occurrence being 4, 3, 2 and 1 respectively.
+
+# SOLUTION 34:- 
+bool cmp(pair<string, int> a, pair<string, int> b) {
+    if(a.second == b.second) return a.first < b.first;
+    return a.second > b.second;
+}
+class Solution {
+public:
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        unordered_map<string,int>map;
+        for(int i = 0; i<words.size(); i++){
+            map[words[i]]++;
+        }
+
+        vector<pair<string,int>>v;
+        for(auto s:map){
+            v.push_back(make_pair(s.first,s.second));
+        }
+
+        sort(v.begin(),v.end(),cmp);
+
+        vector<string> ans;
+        for(int i = 0 ; i < k; i++){
+            ans.push_back(v[i].first);
+        }
+        return ans;
+    }
+};
