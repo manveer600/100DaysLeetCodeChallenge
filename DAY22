@@ -1,0 +1,105 @@
+# QUESTION 35:- Simplify Path
+# DESCRIPTION:- Given a string path, which is an absolute path (starting with a slash '/') to a file or directory in a Unix-style file system, convert it to the simplified canonical path.
+In a Unix-style file system, a period '.' refers to the current directory, a double period '..' refers to the directory up a level, and any multiple consecutive slashes (i.e. '//') are treated as a single slash '/'. For this problem, any other format of periods such as '...' are treated as file/directory names.
+The canonical path should have the following format:
+  The path starts with a single slash '/'.
+  Any two directories are separated by a single slash '/'.
+  The path does not end with a trailing '/'.
+  The path only contains the directories on the path from the root directory to the target file or directory (i.e., no period '.' or double period '..')
+Return the simplified canonical path.
+
+# EXAMPLE1:-
+  Input: path = "/home/"
+  Output: "/home"
+  Explanation: Note that there is no trailing slash after the last directory name.
+
+# EXAMPLE2:-
+  Input: path = "/../"
+  Output: "/"
+  Explanation: Going one level up from the root directory is a no-op, as the root level is the highest level you can go.
+
+# SOLUTION 35:- 
+class Solution {
+public:
+    string simplifyPath(string path) {
+        int n = path.size();
+        stack<string> st;
+        for(int i = 0 ; i < path.length() ; i++){
+
+            if(path[i] == '/'){
+                continue;
+            }
+            
+            string dir;
+            while(i < n && path[i] != '/'){
+                dir.push_back(path[i]);
+                i++;
+            }
+
+            if(dir == "."){
+                continue;
+            }
+            else if(dir == ".."){
+                if(!st.empty()){
+                    st.pop();
+                }
+            }else{
+                st.push(dir);
+            }
+        }
+
+        string ans;
+        while(!st.empty()){
+            ans = '/' + st.top() + ans; 
+            st.pop();
+        }
+
+        if(ans.empty()){
+            ans='/'; 
+        }
+        return ans;
+    }
+};
+
+
+
+# QUESTION 36:- The kth Factor of n
+# DESCRIPTION:- You are given two positive integers n and k. A factor of an integer n is defined as an integer i where n % i == 0.
+Consider a list of all factors of n sorted in ascending order, return the kth factor in this list or return -1 if n has less than k factors.
+ 
+# EXAMPLE1:-
+  Input: n = 12, k = 3
+  Output: 3
+  Explanation: Factors list is [1, 2, 3, 4, 6, 12], the 3rd factor is 3.
+
+# EXAMPLE2:-
+  Input: n = 7, k = 2
+  Output: 7
+  Explanation: Factors list is [1, 7], the 2nd factor is 7.
+
+# SOLUTION 36:- 
+bool cmp(pair<string, int> a, pair<string, int> b) {
+    if(a.second == b.second) return a.first < b.first;
+    return a.second > b.second;
+}
+class Solution {
+class Solution {
+public:
+    int kthFactor(int n, int k) {
+        vector<int> v;
+        for(int i = 1 ; i <= n ; i++){
+            if(n%i == 0){
+                v.push_back(i);
+            }
+            else{
+                continue;
+            }
+        }
+
+        if(v.size() >= k){
+            return v[k-1];
+        }else{
+            return -1;
+        }
+    }
+};
