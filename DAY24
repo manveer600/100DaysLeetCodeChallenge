@@ -1,0 +1,132 @@
+# QUESTION 38:- Minimum Window Substring
+# DESCRIPTION:- Given two strings s and t of lengths m and n respectively, return the minimum window 
+substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
+The testcases will be generated such that the answer is unique.
+# EXAMPLE1:-
+  Input: s = "ADOBECODEBANC", t = "ABC"
+  Output: "BANC"
+  Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+
+# EXAMPLE2:-
+  Input: s = "a", t = "a"
+  Output: "a"
+  Explanation: The entire string s is the minimum window.
+
+# SOLUTION 38:- 
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        string ans;
+        if(t.size() > s.size()){
+            return ans;
+        }
+        int left = 0;
+        int right = 0;
+        int minLength = INT_MAX;
+        int minLeft = 0;
+        int formedChars = 0 ;
+
+        unordered_map<char,int> mapT;
+        unordered_map<char,int> mapWindow;
+        for(char c:t){
+            mapT[c]++;
+        }
+
+        int requiredChars = mapT.size();
+
+        while(right < s.size()){
+            char c = s[right];
+            mapWindow[c]++;
+
+            if(mapT.find(c) != mapT.end() && mapWindow[c] == mapT[c] ){
+                formedChars++;
+            }
+
+            while(formedChars == requiredChars){
+                int currentLength = right-left+1;
+                if(currentLength < minLength){
+                    minLength = currentLength;
+                    minLeft = left;
+                }
+
+                char leftChar = s[left];
+
+                mapWindow[leftChar]--;
+
+                if(mapT.find(leftChar) != mapT.end() && mapT[leftChar] > mapWindow[leftChar]){
+                    formedChars--;
+                }else{
+                    continue;
+                }
+                left++;
+            }
+
+            right++;
+        }
+
+        if(minLength == INT_MAX){
+            ans= "";
+        }
+        else{
+            ans = s.substr(minLeft,minLength);
+        }
+
+        return ans;
+    }
+};
+
+
+# QUESTION 39:- Basic Calculator II
+# DESCRIPTION:- Given a string s which represents an expression, evaluate this expression and return its value. 
+The integer division should truncate toward zero.
+You may assume that the given expression is always valid. All intermediate results will be in the range of [-231, 231 - 1].
+Note: You are not allowed to use any built-in function which evaluates strings as mathematical expressions, such as eval().
+# EXAMPLE1:-
+  Input: s = "3+2*2"
+  Output: 7
+
+# EXAMPLE2:-
+  Input: s = " 3/2 "
+  Output: 1
+
+# SOLUTION 39:- 
+class Solution {
+public:
+    int calculate(string s) {
+        stack<int> stack;
+        char operand = '+';
+        int num = 0;
+        for(int i = 0 ; i < s.size() ; i++){
+            char c = s[i];
+            if(isdigit(c)){
+                num = num*10 + (c-'0');
+            }
+
+            if(!isdigit(c) && !isspace(c) || i == s.size()-1){
+                if(operand == '+'){
+                    stack.push(num);
+                }else if(operand == '-'){
+                    stack.push(-num);
+                }else{
+                    int top = stack.top();
+                    stack.pop();
+                    if(operand == '*'){
+                        stack.push(top*num);
+                    }else{
+                        stack.push(top/num);
+                    }
+                }
+
+                operand = c;
+                num = 0;
+            }
+        }
+        int ans = 0;
+        while(!stack.empty()){
+             ans = ans+stack.top();
+             stack.pop();
+        }
+
+        return ans;
+    }
+};
