@@ -1,0 +1,96 @@
+# QUESTION 45:- Make The String Great
+# DESCRIPTION:- Given a string s of lower and upper case English letters.
+A good string is a string which doesn't have two adjacent characters s[i] and s[i + 1] where:
+0 <= i <= s.length - 2
+s[i] is a lower-case letter and s[i + 1] is the same letter but in upper-case or vice-versa.
+To make the string good, you can choose two adjacent characters that make the string bad and remove them. You can keep doing this until the string becomes good.
+Return the string after making it good. The answer is guaranteed to be unique under the given constraints.
+Notice that an empty string is also good.
+
+# EXAMPLE1:-
+  Input: s = "leEeetcode"
+  Output: "leetcode"
+  Explanation: In the first step, either you choose i = 1 or i = 2, both will result "leEeetcode" to be reduced to "leetcode".
+
+ # EXAMPLE2:-
+  Input: s = "abBAcC"
+Output: ""
+Explanation: We have many possible scenarios, and all lead to the same answer. For example:
+"abBAcC" --> "aAcC" --> "cC" --> ""
+"abBAcC" --> "abBA" --> "aA" --> ""
+
+# SOLUTION 45:- 
+class Solution {
+public:
+    string makeGood(string s) {
+        int i = 0;
+        string ans;
+        stack<int>stack;
+
+        while(i < s.size()){
+            char ch = s[i];                   
+            if(!stack.empty() &&  ( ((stack.top()-'0') - (ch - '0') == 32)   ||    
+            ((ch-'0') - (stack.top() - '0')) ==  32)){
+                stack.pop();
+            }
+            else{
+                stack.push(s[i]);
+            }
+            i++;
+        }
+
+        while(!stack.empty()){
+            ans.push_back(stack.top());
+            stack.pop();
+        }
+
+        reverse(ans.begin() , ans.end());
+        return ans;
+    }
+};
+
+
+
+
+# QUESTION 46:-  Remove All Adjacent Duplicates In String
+# DESCRIPTION:- You are given a string s consisting of lowercase English letters. A duplicate removal consists of choosing two adjacent and equal letters and removing them.
+We repeatedly make duplicate removals on s until we no longer can.
+Return the final string after all such duplicate removals have been made. It can be proven that the answer is unique.
+
+# EXAMPLE1:-
+  Input: s = "abbaca"
+  Output: "ca"
+  Explanation: 
+  For example, in "abbaca" we could remove "bb" since the letters are adjacent and equal, and this is the only possible move.  The result of this move is that the string is "aaca", of which only "aa" is possible, so the final string is "ca".
+
+ # EXAMPLE2:-
+    Input: s = "azxxzy"
+    Output: "ay"
+ 
+# SOLUTION 46:- 
+class Solution {
+public:
+    string removeDuplicates(string s) {
+        stack<char>stack;
+        for(int i = 0; i < s.size(); i++){
+            char element = s[i];
+
+            if(!stack.empty() && stack.top() == element){
+                stack.pop();
+
+            }
+            else
+                stack.push(element);
+        }
+        string ans;
+        while(!stack.empty()){
+            ans.push_back(stack.top());
+            stack.pop();
+        }
+
+        reverse(ans.begin() , ans.end());
+
+        return ans;
+    }
+
+};
