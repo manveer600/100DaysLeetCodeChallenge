@@ -1,0 +1,46 @@
+# QUESTION 48:- Reverse Substrings Between Each Pair of Parentheses
+# DESCRIPTION:- You are given a string s that consists of lower case English letters and brackets.
+Reverse the strings in each pair of matching parentheses, starting from the innermost one.
+Your result should not contain any brackets.
+
+# EXAMPLE1:-
+  Input: s = "(abcd)"
+  Output: "dcba"
+  
+ # EXAMPLE2:-
+  Input: s = "(u(love)i)"
+  Output: "iloveu"
+  Explanation: The substring "love" is reversed first, then the whole string is reversed.
+
+# SOLUTION 48:- 
+class Solution {
+public:
+    string reverseParentheses(string s) {
+        stack<int> stack;
+        for(char ch: s){
+            if (ch != ')'){
+                stack.push(ch);
+            }
+            else{
+                string temp = "";
+                while(stack.top() != '('){
+                    temp += stack.top();
+                    stack.pop();
+                }
+                stack.pop();
+                for (char ch2:temp){
+                    stack.push(ch2);
+                }
+            }
+        }
+
+        string ans;
+        while(!stack.empty()){
+            ans.push_back(stack.top());
+            stack.pop();
+        }
+
+        reverse(ans.begin() , ans.end());
+        return ans;
+    }
+};
