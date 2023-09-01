@@ -1,0 +1,293 @@
+# QUESTION 54:- Minimum Replacements to Sort the Array
+# DESCRIPTION:- You are given a 0-indexed integer array nums. In one operation you can replace any element of the array with any two elements that sum to it.
+For example, consider nums = [5,6,7]. In one operation, we can replace nums[1] with 2 and 4 and convert nums to [5,2,4,7].
+Return the minimum number of operations to make an array that is sorted in non-decreasing order.
+ 
+# EXAMPLE1:-
+  Input: nums = [1,2,3,4,5]
+  Output: 0
+  Explanation: The array is already in non-decreasing order. Therefore, we return 0. 
+
+# EXAMPLE2:-
+  Input: nums = [3,9,3]
+  Output: 2
+  Explanation: Here are the steps to sort the array in non-decreasing order:
+  - From [3,9,3], replace the 9 with 3 and 6 so the array becomes [3,3,6,3]
+  - From [3,3,6,3], replace the 6 with 3 and 3 so the array becomes [3,3,3,3,3]
+  There are 2 steps to sort the array in non-decreasing order. Therefore, we return 2.
+
+# SOLUTION 54:- 
+class Solution {
+public:
+    long long minimumReplacement(vector<int>& nums) {
+        long long ans = 0 ;
+        int prev = nums[nums.size() - 1];
+        for(int i = nums.size()-2; i >= 0; i--){
+            if(nums[i] < prev){
+                prev = nums[i];
+                continue;
+            }
+            else{
+                int numberOfDeletions = nums[i]/prev;
+                
+                if(nums[i]%prev != 0){
+                    numberOfDeletions++;
+                    prev = nums[i]/numberOfDeletions;
+                }
+                ans += numberOfDeletions-1;
+            }
+        }
+
+        return ans;
+    }
+};
+
+
+
+
+# QUESTION 55:- Longest Valid Parentheses
+# DESCRIPTION:- Given a string containing just the characters '(' and ')', return the length of the longest valid (well-formed) parentheses substring.
+ 
+# EXAMPLE1:-
+  Input: s = "(()"
+  Output: 2
+  Explanation: The longest valid parentheses substring is "()".
+
+# EXAMPLE2:-
+  Input: s = ")()())"
+  Output: 4
+  Explanation: The longest valid parentheses substring is "()()".
+
+
+# SOLUTION 55:- 
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        stack<int> stack;
+        stack.push(-1);
+        int maxLength = 0;
+
+        for(int i = 0; i < s.size(); i++){
+            if(s[i] == '('){
+                stack.push(i);
+            }
+            else{
+               stack.pop();
+               if(!stack.empty()){
+                   maxLength = max(maxLength , i-stack.top());
+               }
+               else{
+                   stack.push(i);
+               }
+            }
+        }
+ return maxLength;
+
+    }
+};
+
+
+
+# QUESTION 56:- Binary Tree Inorder Traversal
+# DESCRIPTION:- Given the root of a binary tree, return the inorder traversal of its nodes' values.
+ 
+# EXAMPLE1:-
+  Input: root = [1,null,2,3]
+  Output: [1,3,2]
+
+# EXAMPLE2:-
+  Input: root = []
+  Output: []
+
+# SOLUTION 56:- 
+class Solution {
+    void print(TreeNode* root , vector<int>& ans){
+       //base case
+       if(root == NULL){
+           return;
+       }
+       print(root-> left , ans);
+       ans.push_back(root -> val);
+       print(root-> right, ans);
+    }
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> ans;
+       print(root , ans);
+       return ans;
+    }
+};
+
+
+
+# QUESTION 57:- Binary Tree Preorder Traversal
+# DESCRIPTION:- Given the root of a binary tree, return the preorder traversal of its nodes' values.
+ 
+# EXAMPLE1:-
+  Input: root = [1,null,2,3]
+  Output: [1,2,3]
+
+# EXAMPLE2:-
+  Input: root = []
+  Output: []
+
+# SOLUTION 57:- 
+class Solution {
+    void print(TreeNode* root , vector<int>& ans){
+       //base case
+       if(root == NULL){
+           return;
+       }
+       ans.push_back(root -> val);
+       print(root-> left , ans);
+       print(root-> right, ans);
+    }
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> ans;
+       print(root , ans);
+       return ans;
+    }
+};
+
+
+
+# QUESTION 58:- Binary Tree Postorder Traversal
+# DESCRIPTION:- Given the root of a binary tree, return the postorder traversal of its nodes' values.
+ 
+# EXAMPLE1:-
+  Input: root = [1,null,2,3]
+  Output: [3,2,1]
+
+# EXAMPLE2:-
+  Input: root = []
+  Output: []
+
+# SOLUTION 58:- 
+class Solution {
+    void print(TreeNode* root , vector<int>& ans){
+       //base case
+       if(root == NULL){
+           return;
+       }
+       print(root-> left , ans);
+       print(root-> right, ans);
+       ans.push_back(root -> val);
+    }
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> ans;
+       print(root , ans);
+       return ans;
+    }
+};
+
+
+
+# QUESTION 59:- Min Stack
+# DESCRIPTION:- Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+Implement the MinStack class:
+MinStack() initializes the stack object.
+void push(int val) pushes the element val onto the stack.
+void pop() removes the element on the top of the stack.
+int top() gets the top element of the stack.
+int getMin() retrieves the minimum element in the stack.
+You must implement a solution with O(1) time complexity for each function.
+
+ 
+# EXAMPLE1:-
+  Input
+  ["MinStack","push","push","push","getMin","pop","top","getMin"]
+  [[],[-2],[0],[-3],[],[],[],[]]
+  
+  Output
+  [null,null,null,null,-3,null,0,-2]
+  
+  Explanation
+  MinStack minStack = new MinStack();
+  minStack.push(-2);
+  minStack.push(0);
+  minStack.push(-3);
+  minStack.getMin(); // return -3
+  minStack.pop();
+  minStack.top();    // return 0
+  minStack.getMin(); // return -2
+
+# SOLUTION 59:- 
+#include <stack>
+class MinStack {
+public:
+    stack<int> stack,stack2;
+    int mini = INT_MAX;
+    MinStack() {
+        
+    }
+    
+    void push(int val) {
+        stack.push(val);
+
+        if(stack2.empty() || val <= stack2.top()){
+           stack2.push(val); 
+        }
+    }
+    
+    void pop() {
+        if(!stack.empty()){
+            int top = stack.top();
+            stack.pop();
+
+            if(top == stack2.top()){
+                stack2.pop();
+            }
+        }
+    }
+    
+    int top() {
+        return stack.top();
+    }
+    
+    int getMin() {
+   
+        return stack2.top();
+    }
+};
+
+
+
+# QUESTION 60:- Palindrome Linked List
+# DESCRIPTION:- Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
+ 
+# EXAMPLE1:-
+  Input: head = [1,2,2,1]
+  Output: true
+ 
+# EXAMPLE2:-
+  Input: head = [1,2]
+  Output: false
+ 
+# SOLUTION 60:- 
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        stack<int> s;
+        ListNode* temp = head;
+        while(head != NULL){
+            s.push(head-> val);
+            head = head->next;
+        }
+
+        head = temp;
+
+        while(!s.empty()){
+            int top = s.top();
+            if(top != head->val){
+                return false;
+            }
+
+            s.pop();
+            head = head->next;
+        }
+
+        return true;
+    }
+};
