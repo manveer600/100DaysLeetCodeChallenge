@@ -1,0 +1,40 @@
+# QUESTION 53:- Palindrome Linked List
+# DESCRIPTION:- Given the head of a singly linked list, return true if it is a 
+palindrome or false otherwise.
+
+# EXAMPLE1:-
+  Example 1:
+  Input: head = [1,2,2,1]
+  Output: true
+
+# EXAMPLE2:-
+  Input: head = [1,2]
+  Output: false
+
+
+# SOLUTION 53:- 
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        stack<int> s;
+        ListNode* temp = head;
+        while(head != NULL){
+            s.push(head-> val);
+            head = head->next;
+        }
+
+        head = temp;
+
+        while(!s.empty()){
+            int top = s.top();
+            if(top != head->val){
+                return false;
+            }
+
+            s.pop();
+            head = head->next;
+        }
+
+        return true;
+    }
+};
