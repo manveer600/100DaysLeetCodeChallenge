@@ -1,0 +1,125 @@
+# QUESTION 63:- Linked List Cycle
+# DESCRIPTION:- Given head, the head of a linked list, determine if the linked list has a cycle in it.
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. Internally, pos is used to denote the index of the node that tail's next pointer is connected to. Note that pos is not passed as a parameter.
+Return true if there is a cycle in the linked list. Otherwise, return false.
+
+# EXAMPLE1:-
+  Input: head = [3,2,0,-4], pos = 1
+  Output: true
+  Explanation: There is a cycle in the linked list, where the tail connects to the 1st node (0-indexed).
+
+# EXAMPLE2:-  
+  Input: head = [1,2], pos = 0
+  Output: true
+  Explanation: There is a cycle in the linked list, where the tail connects to the 0th node.
+ 
+# SOLUTION 63:- 
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while(fast != NULL && fast -> next != NULL ){
+
+            fast = fast -> next -> next;
+            slow = slow-> next; 
+            if(fast == slow){
+                return true;
+            }
+        }
+
+        return false;
+    }
+};
+
+
+# QUESTION 64:- Jump Game
+# DESCRIPTION:- You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
+Return true if you can reach the last index, or false otherwise.
+
+# EXAMPLE1:-
+  Input: nums = [2,3,1,1,4]
+  Output: true
+  Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
+
+# EXAMPLE2:-  
+  Input: nums = [3,2,1,0,4]
+  Output: false
+  Explanation: You will always arrive at index 3 no matter what. Its maximum jump length is 0, which makes it impossible to reach the last index.
+
+# SOLUTION 64:- 
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int maxi = nums[0];
+        int n = nums.size();
+        if(nums.size() == 1 && nums[0] == 0){
+            return true;
+        }
+        if(nums[0] == 0){
+            return false;
+        }
+        
+        for(int i = 1; i < n; i++){
+            if(i == n-1){
+                return true;
+            }
+            maxi--;
+            maxi = max(maxi,nums[i]);
+            if(maxi == 0){
+                return false;
+            }
+        }
+
+        return true;
+    }
+};
+
+
+# QUESTION 65:- Jump Game III
+# DESCRIPTION:- Given an array of non-negative integers arr, you are initially positioned at start index of the array. When you are at index i, you can jump to i + arr[i] or i - arr[i], check if you can reach any index with value 0.
+Notice that you can not jump outside of the array at any time.
+
+# EXAMPLE1:-
+  Input: arr = [4,2,3,0,3,1,2], start = 5
+  Output: true
+  Explanation: 
+  All possible ways to reach at index 3 with value 0 are: 
+  index 5 -> index 4 -> index 1 -> index 3 
+  index 5 -> index 6 -> index 4 -> index 1 -> index 3 
+
+# EXAMPLE2:-  
+  Input: arr = [4,2,3,0,3,1,2], start = 0
+  Output: true 
+  Explanation: 
+  One possible way to reach at index 3 with value 0 is: 
+  index 0 -> index 4 -> index 1 -> index 3
+
+# SOLUTION 65:- 
+class Solution {
+bool ans=false;
+     bool solve(vector<int>& arr , int start, vector<bool>& visited){
+    //base cases
+    if (start < 0 || start > arr.size()-1 || visited[start]){
+        return false;
+    }
+
+    if(arr[start] == 0){
+        return true;
+    }
+    
+    visited[start] = true;
+
+    int left = solve(arr,start-arr[start],visited);
+    int right = solve(arr,start+arr[start],visited);
+
+
+    return left||right;
+}
+public:
+    bool canReach(vector<int>& arr, int start) {
+        vector<bool> visited(arr.size(),false);
+        return solve(arr,start,visited);
+    }
+};
