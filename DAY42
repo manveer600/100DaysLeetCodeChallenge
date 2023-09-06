@@ -1,0 +1,113 @@
+# QUESTION 67:- Trapping Rain Water
+# DESCRIPTION:- Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
+
+# EXAMPLE1:-
+  Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
+  Output: 6
+  Explanation: The above elevation map (black section) is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped.
+
+# EXAMPLE2:-  
+  Input: height = [4,2,0,3,2,5]
+  Output: 9
+ 
+# SOLUTION 67:- 
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int maxHeight = INT_MIN;
+        vector<int> left(height.size());
+        int n = height.size();
+        for(int i = 0; i < height.size(); i++){
+            maxHeight = max(maxHeight, height[i]);
+            left[i] = maxHeight;
+        }
+
+        maxHeight = INT_MIN;
+        vector<int> right(height.size());
+        for(int i = n-1; i >= 0; i--){
+            maxHeight = max(maxHeight, height[i]);
+            right[i] = maxHeight;
+        }
+        int ans = 0;
+        for(int i = 0; i < n;i++ ){
+            ans +=  min(left[i],right[i])-height[i];
+        }
+        return ans;
+    }
+};
+
+
+# QUESTION 68:- Largest Rectangle in Histogram
+# DESCRIPTION:- Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.
+
+# EXAMPLE1:-
+  Input: heights = [2,1,5,6,2,3]
+  Output: 10
+  Explanation: The above is a histogram where width of each bar is 1.
+  The largest rectangle is shown in the red area, which has an area = 10 units.
+
+# EXAMPLE2:-  
+  Input: heights = [2,4]
+  Output: 4
+
+# SOLUTION 68:- 
+class Solution {
+public:
+vector<int> indexOfNextSmallerHeight(vector<int>& heights){
+    stack<int> stack;
+    stack.push(-1);
+    vector<int> next(heights.size());
+    int n = heights.size();
+    for(int i = n-1; i >= 0 ; i--){
+        while(stack.top() != -1 && heights[i] <= heights[stack.top()]){
+            stack.pop();
+        }
+        next[i] = stack.top();
+        stack.push(i);
+    }
+
+    for(int i = 0 ; i < next.size(); i++){
+        cout << next[i] << " " ;
+    }cout << endl;
+    return next;
+}
+
+vector<int> indexOfPreviousSmallerElement(vector<int>& heights){
+    stack<int> stack;
+    stack.push(-1);
+    vector<int> previous(heights.size());
+    int n = heights.size();
+    for(int i = 0; i < n ; i++){
+        while(stack.top() != -1 && heights[i] <= heights[stack.top()]){
+            stack.pop();
+        }
+        previous[i] = stack.top();
+        stack.push(i);
+    }
+
+    for(int i = 0 ; i < previous.size(); i++){
+        cout << previous[i] << " " ;
+    }cout << endl;
+    return previous;
+}
+    int largestRectangleArea(vector<int>& heights) {
+        vector<int> next(heights.size());
+        vector<int> previous(heights.size());
+
+        next = indexOfNextSmallerHeight(heights);
+        previous = indexOfPreviousSmallerElement(heights);
+
+        int maxi = INT_MIN;
+        for(int i = 0 ; i < heights.size(); i++){
+           if(next[i] == -1){
+               next[i] = heights.size();
+           }
+
+           int ans = (next[i] - previous[i] - 1)*heights[i];
+           if(ans > maxi){
+               maxi = ans; 
+           }
+       }
+       return maxi;
+    }
+};
