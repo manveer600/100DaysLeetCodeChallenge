@@ -1,0 +1,98 @@
+# QUESTION 69:- Maximal Rectangle
+# DESCRIPTION:- Given a rows x cols binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
+
+# EXAMPLE1:-
+  Input: matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+  Output: 6
+  Explanation: The maximal rectangle is shown in the above picture.
+
+# EXAMPLE2:-  
+  Input: matrix = [["0"]]
+  Output: 0
+
+# SOLUTION 69:- 
+class Solution {
+public:
+vector<int> indexOfNextSmallerHeight(vector<int>& heights){
+    stack<int> stack;
+    stack.push(-1);
+    vector<int> next(heights.size());
+    int n = heights.size();
+    for(int i = n-1; i >= 0 ; i--){
+        while(stack.top() != -1 && heights[i] <= heights[stack.top()]){
+            stack.pop();
+        }
+        next[i] = stack.top();
+        stack.push(i);
+    }
+
+    for(int i = 0 ; i < next.size(); i++){
+        cout << next[i] << " " ;
+    }cout << endl;
+    return next;
+}
+
+vector<int> indexOfPreviousSmallerElement(vector<int>& heights){
+    stack<int> stack;
+    stack.push(-1);
+    vector<int> previous(heights.size());
+    int n = heights.size();
+    for(int i = 0; i < n ; i++){
+        while(stack.top() != -1 && heights[i] <= heights[stack.top()]){
+            stack.pop();
+        }
+        previous[i] = stack.top();
+        stack.push(i);
+    }
+
+    for(int i = 0 ; i < previous.size(); i++){
+        cout << previous[i] << " " ;
+    }cout << endl;
+    return previous;
+}
+
+int largestRectangularArea(vector<int>& heights){
+
+        vector<int> next(heights.size());
+        vector<int> previous(heights.size());
+
+        next = indexOfNextSmallerHeight(heights);
+        previous = indexOfPreviousSmallerElement(heights);
+
+        int maxi = INT_MIN;
+        for(int i = 0 ; i < heights.size(); i++){
+           if(next[i] == -1){
+               next[i] = heights.size();
+           }
+
+           int ans = (next[i] - previous[i] - 1)*heights[i];
+           if(ans > maxi){
+               maxi = ans; 
+           }
+       }
+
+       return maxi;
+}
+    int maximalRectangle(vector<vector<char>>& matrix) {
+
+       int n = matrix.size(); //4
+        int m = matrix[0].size(); //5
+        int maxarea = 0;
+        vector<int>arr(m,0);
+        for(int i=0;i<matrix.size();i++){
+            for(int j=0;j<m;j++){
+                if( i == 0){
+                    arr[j] = matrix[i][j]-'0';
+                }
+                else{
+                    if(matrix[i][j] == '1'){
+                        arr[j] = arr[j] + 1;
+                    }
+                    else arr[j] = 0;
+                }
+            }
+            maxarea = max(maxarea,largestRectangularArea(arr));
+        }
+        return maxarea;
+    }
+};
