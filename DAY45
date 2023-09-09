@@ -1,0 +1,113 @@
+# QUESTION 72:- Middle of the Linked List
+# DESCRIPTION:- Given the head of a singly linked list, return the middle node of the linked list.
+If there are two middle nodes, return the second middle node.
+
+# EXAMPLE1:-
+  Input: head = [1,2,3,4,5]
+  Output: [3,4,5]
+  Explanation: The middle node of the list is node 3.
+
+# EXAMPLE2:-  
+  Input: head = [1,2,3,4,5,6]
+  Output: [4,5,6]
+  Explanation: Since the list has two middle nodes with values 3 and 4, we return the second one.
+
+# SOLUTION 72:- 
+class Solution {
+    int getLength(ListNode* head){
+        ListNode* current = head;
+        int count = 0;
+        while(current != NULL){
+            count = count+1;
+            current = current->next;
+        }
+        return count;
+    }
+public:
+    ListNode* middleNode(ListNode* head) {
+        int length = getLength(head);
+        cout << length;
+
+        int middle = length/2;
+        int start = 0;
+        ListNode* temp = head;
+        while(start < middle){
+            temp = temp->next;
+            start++;
+        }
+        
+        return temp;
+    }
+};
+
+
+# QUESTION 73:- Reverse Linked List
+# DESCRIPTION:- Given the head of a singly linked list, reverse the list, and return the reversed list.
+
+# EXAMPLE1:-
+  Input: head = [1,2,3,4,5]
+  Output: [5,4,3,2,1]
+
+# EXAMPLE2:-  
+  Input: head = [1,2]
+Output: [2,1]
+
+# SOLUTION 73:- 
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* current = head;
+        ListNode* previous = NULL;
+
+        while(current != NULL){
+            ListNode* forward = current -> next;
+            current-> next = previous;
+            previous = current;
+            current = forward;
+        }
+
+        return previous;
+    }
+};
+
+
+# QUESTION 74:- Reverse Linked List II
+# DESCRIPTION:- Given the head of a singly linked list and two integers left and right where left <= right, reverse the nodes of the list from position left to position right, and return the reversed list.
+
+# EXAMPLE1:-
+  Input: head = [1,2,3,4,5], left = 2, right = 4
+  Output: [1,4,3,2,5]
+
+# EXAMPLE2:-  
+  Input: head = [5], left = 1, right = 1
+  Output: [5]
+
+# SOLUTION 74:- 
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        
+        stack<int>stack;
+        ListNode* current = head;
+        ListNode* temp = head;
+        int val = right-left+1;
+        for(int i = 1; i < left; i++){
+            temp = temp-> next;
+            current = current-> next;
+        }
+        
+        while(val != 0){
+            stack.push(temp->val);
+            temp = temp-> next;
+            val--;
+        }
+
+        while(val != right-left+1){
+            current-> val = stack.top();
+            stack.pop();
+            current = current-> next;
+            val++;
+        }
+        return head;
+    }
+};
