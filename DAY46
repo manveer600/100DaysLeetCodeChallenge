@@ -1,0 +1,105 @@
+# QUESTION 75:- Add two numbers represented by linked lists
+# DESCRIPTION:- Given two decimal numbers represented by two linked lists of size N and M respectively. The task is to return a linked list that represents the sum of these two numbers.
+For example, the number 190 will be represented by the linked list, 1->9->0->null, similarly 25 by 2->5->null. Sum of these two numbers is 190 + 25 = 215, which will be represented by 2->1->5->null. You are required to return the head of the linked list 2->1->5->null.
+
+# EXAMPLE1:-
+  Input:
+  N = 2
+  valueN[] = {4,5}
+  M = 3
+  valueM[] = {3,4,5}
+  Output: 3 9 0  
+  Explanation: For the given two linked
+  list (4 5) and (3 4 5), after adding
+  the two linked list resultant linked
+  list will be (3 9 0).
+
+# EXAMPLE2:-  
+  Input:
+  N = 2
+  valueN[] = {6,3}
+  M = 1
+  valueM[] = {7}
+  Output: 7 0
+  Explanation: For the given two linked
+  list (6 3) and (7), after adding the
+  two linked list resultant linked list
+  will be (7 0).
+
+# SOLUTION 75:- 
+class Solution
+{
+    struct Node* reverse(struct Node*& node){
+    struct Node* prev = NULL;
+    struct Node* curr = node;
+    while(curr != NULL){
+        struct Node* forward = curr-> next ;
+        curr-> next = prev;
+        prev = curr ;
+        curr = forward;
+    }
+    return prev;
+}
+struct Node* sum(struct Node*& first, struct Node*& second){
+    struct Node* head = NULL;
+    struct Node* tail = NULL;
+    int carry = 0;
+    while(first != NULL && second != NULL ){
+        int sum = first->data+second->data+carry;
+        int lastDigit = sum%10;
+        struct Node* temp = new struct Node(lastDigit);
+        insert(head,tail,temp);
+        carry = sum/10;
+        first = first-> next;
+        second = second -> next;
+    }
+    while(first != NULL){
+        int sum = first->data+carry;
+        int lastDigit = sum%10;
+        struct Node* temp = new struct Node(lastDigit);
+        insert(head,tail,temp);
+        carry = sum/10;
+        first = first-> next;
+    }
+
+    while(second != NULL){
+        int sum = second->data+carry;
+        int lastDigit = sum%10;
+        struct Node* temp = new struct Node(lastDigit);
+        insert(head,tail,temp);
+        carry = sum/10;
+        second = second-> next;
+    }
+
+    while(carry != 0 ){
+        int sum = carry;
+        struct Node* temp = new struct Node(sum);
+        insert(head,tail,temp);
+        carry = sum/10;
+    }
+
+    return head;
+} 
+
+void insert(struct Node* &head , struct Node* &tail, struct Node* &temp){
+
+    if(head == NULL){
+        head = temp;
+        tail = temp;
+        return;
+    }
+    tail-> next = temp;
+    tail = temp;
+}
+    public:
+    //Function to add two numbers represented by linked list.
+    struct Node* addTwoLists(struct Node* first, struct Node* second)
+    {
+        first = reverse(first);
+        second = reverse(second);
+
+        struct Node* ans = sum(first,second);
+        ans = reverse(ans);
+        return ans;
+    }
+};
