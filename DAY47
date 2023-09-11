@@ -1,0 +1,347 @@
+# QUESTION 76:- Intersection of Two Linked Lists
+# DESCRIPTION:-Given the heads of two singly linked-lists headA and headB, return the node at which the two lists intersect. If the two linked lists have no intersection at all, return null.
+For example, the following two linked lists begin to intersect at node c1:
+The test cases are generated such that there are no cycles anywhere in the entire linked structure.
+Note that the linked lists must retain their original structure after the function returns.
+
+Custom Judge:
+The inputs to the judge are given as follows (your program is not given these inputs):
+intersectVal - The value of the node where the intersection occurs. This is 0 if there is no intersected node.
+listA - The first linked list.
+listB - The second linked list.
+skipA - The number of nodes to skip ahead in listA (starting from the head) to get to the intersected node.
+skipB - The number of nodes to skip ahead in listB (starting from the head) to get to the intersected node.
+The judge will then create the linked structure based on these inputs and pass the two heads, headA and headB to your program. If you correctly return the intersected node, then your solution will be accepted.
+
+ 
+# EXAMPLE1:-
+  Input: intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
+  Output: Intersected at '8'
+  Explanation: The intersected node's value is 8 (note that this must not be 0 if the two lists intersect).
+  From the head of A, it reads as [4,1,8,4,5]. From the head of B, it reads as [5,6,1,8,4,5]. There are 2 nodes before the intersected node in A; There are 3 nodes before the intersected node in B.
+  - Note that the intersected node's value is not 1 because the nodes with value 1 in A and B (2nd node in A and 3rd node in B) are different node references. In other words, they point to two different locations in memory, while the nodes with value 8 in A and B (3rd node in A and 4th node in B) point to the same location in memory.
+
+# EXAMPLE2:-  
+  Input: intersectVal = 2, listA = [1,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1
+  Output: Intersected at '2'
+  Explanation: The intersected node's value is 2 (note that this must not be 0 if the two lists intersect).
+  From the head of A, it reads as [1,9,1,2,4]. From the head of B, it reads as [3,2,4]. There are 3 nodes before the intersected node in A; There are 1 node before the intersected node in B.
+
+# SOLUTION 76:- 
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode* current1 = headA;
+        ListNode* current2 = headB;
+        int lengthA = 0;
+        int lengthB = 0;
+        while(current1 != NULL){
+            lengthA++;
+            current1 = current1-> next;
+        }
+        while(current2 != NULL){
+            lengthB++;
+            current2 = current2-> next;
+        }
+
+        int mini = min(lengthA,lengthB);
+        int difference = abs(lengthA-lengthB);
+        int maxi = max(lengthA,lengthB);
+
+
+        current1 = headA;
+        current2 = headB;
+        if(lengthA > lengthB){
+            while(difference != 0){
+                current1 = current1-> next;
+                difference--;
+            }
+        }else{
+            while(difference != 0){
+                current2 = current2->next; 
+                difference --;
+            }
+        }
+
+        while(current1 != current2){
+            current1 = current1-> next;
+            current2 = current2-> next;
+        }
+
+        return current1;
+
+    }
+};
+
+
+
+# QUESTION 77:- Design Linked List
+# DESCRIPTION:- Design your implementation of the linked list. You can choose to use a singly or doubly linked list.
+A node in a singly linked list should have two attributes: val and next. val is the value of the current node, and next is a pointer/reference to the next node.
+If you want to use the doubly linked list, you will need one more attribute prev to indicate the previous node in the linked list. Assume all nodes in the linked list are 0-indexed.
+Implement the MyLinkedList class:
+MyLinkedList() Initializes the MyLinkedList object.
+int get(int index) Get the value of the indexth node in the linked list. If the index is invalid, return -1.
+void addAtHead(int val) Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list.
+void addAtTail(int val) Append a node of value val as the last element of the linked list.
+void addAtIndex(int index, int val) Add a node of value val before the indexth node in the linked list. If index equals the length of the linked list, the node will be appended to the end of the linked list. If index is greater than the length, the node will not be inserted.
+void deleteAtIndex(int index) Delete the indexth node in the linked list, if the index is valid.
+ 
+Custom Judge:
+The inputs to the judge are given as follows (your program is not given these inputs):
+intersectVal - The value of the node where the intersection occurs. This is 0 if there is no intersected node.
+listA - The first linked list.
+listB - The second linked list.
+skipA - The number of nodes to skip ahead in listA (starting from the head) to get to the intersected node.
+skipB - The number of nodes to skip ahead in listB (starting from the head) to get to the intersected node.
+The judge will then create the linked structure based on these inputs and pass the two heads, headA and headB to your program. If you correctly return the intersected node, then your solution will be accepted.
+
+ 
+# EXAMPLE1:-
+  Input
+  ["MyLinkedList", "addAtHead", "addAtTail", "addAtIndex", "get", "deleteAtIndex", "get"]
+  [[], [1], [3], [1, 2], [1], [1], [1]]
+  Output
+  [null, null, null, null, 2, null, 3]
+  
+  Explanation
+  MyLinkedList myLinkedList = new MyLinkedList();
+  myLinkedList.addAtHead(1);
+  myLinkedList.addAtTail(3);
+  myLinkedList.addAtIndex(1, 2);    // linked list becomes 1->2->3
+  myLinkedList.get(1);              // return 2
+  myLinkedList.deleteAtIndex(1);    // now the linked list is 1->3
+  myLinkedList.get(1);              // return 3
+ 
+# SOLUTION 77:- 
+class MyLinkedList {
+public:
+class Node {
+    public:
+        int val;
+        Node* next;
+        Node(int data) {
+            val = data;
+            next = NULL;
+        }
+    };
+
+    Node* head;
+    Node* tail;
+    int size;
+
+    MyLinkedList() {
+       head = NULL;
+        tail = NULL;
+        size = 0;
+
+    }
+    
+    int get(int index) {
+        if(index >= size || index < 0){return -1;}
+        Node* current = head ;
+        while(index != 0){
+            current = current-> next;
+            index--;
+        }
+        return current-> val;
+    }
+    
+    void addAtHead(int val) {
+        if(head == NULL && tail == NULL){
+            Node* temp = new Node(val);
+            head = temp ;
+            tail = temp;
+            size++;
+        }else{
+            Node* temp = new Node(val);
+            temp-> next = head;
+            head = temp;
+            size++;
+        }
+    }
+    
+    void addAtTail(int val) {
+        if(head == NULL && tail == NULL){
+            Node* temp = new Node(val);
+            head = temp ;
+            tail = temp;
+            size++;
+        }else{
+        Node* temp = new Node(val);
+        tail-> next = temp;
+        tail = temp;
+        size++;
+        }
+    }
+    
+    void addAtIndex(int index, int val) {
+        if(index < 0 || index > size){
+            return;
+        }if(index==0){
+            addAtHead(val);
+        }else if(index == size){
+            addAtTail(val);
+        }else{
+        Node* current = head ;
+        Node* prev = NULL;
+        while(index != 0){
+            prev = current;
+            current = current-> next;
+            index--;
+        }
+        Node* temp = new Node(val);
+        prev-> next = temp;
+        temp-> next = current;
+        size++;
+        }
+    }
+    
+     void deleteAtIndex(int index) {
+        if (index < 0 || index >= size) return;
+        if (index == 0) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            if (size == 1) {
+                tail = NULL;
+            }
+        } else {
+            Node* temp = head;
+            int loop = index - 1;
+            while (loop--) temp = temp->next;
+            Node* temp2 = temp->next;
+            temp->next = temp2->next;
+            if (index == size - 1) {
+                tail = temp;
+            }
+            delete temp2;
+        }
+        size--;
+    }
+};
+
+
+
+
+# QUESTION 78:-  Add Two Numbers
+# DESCRIPTION:- You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+ 
+# EXAMPLE1:-
+  Input: l1 = [2,4,3], l2 = [5,6,4]
+  Output: [7,0,8]
+  Explanation: 342 + 465 = 807.
+  # SOLUTION 77:- 
+
+# Example 2:
+  Input: l1 = [0], l2 = [0]
+  Output: [0]
+
+# SOLUTION 78:- 
+class Solution {
+public:
+ListNode* reverse(ListNode*& node){
+    ListNode* prev = NULL;
+    ListNode* curr = node;
+    while(curr != NULL){
+        ListNode* forward = curr-> next ;
+        curr-> next = prev;
+        prev = curr ;
+        curr = forward;
+    }
+    return prev;
+}
+ListNode* sum(ListNode*& first, ListNode*& second){
+    ListNode* head = NULL;
+    ListNode* tail = NULL;
+    int carry = 0;
+    while(first != NULL && second != NULL ){
+        int sum = first->val+second->val+carry;
+        int lastDigit = sum%10;
+        ListNode* temp = new ListNode(lastDigit);
+        insert(head,tail,temp);
+        carry = sum/10;
+        first = first-> next;
+        second = second -> next;
+    }
+    while(first != NULL){
+        int sum = first->val+carry;
+        int lastDigit = sum%10;
+        ListNode* temp = new ListNode(lastDigit);
+        insert(head,tail,temp);
+        carry = sum/10;
+        first = first-> next;
+    }
+
+    while(second != NULL){
+        int sum = second->val+carry;
+        int lastDigit = sum%10;
+        ListNode* temp = new ListNode(lastDigit);
+        insert(head,tail,temp);
+        carry = sum/10;
+        second = second-> next;
+    }
+
+    while(carry != 0 ){
+        int sum = carry;
+        ListNode* temp = new ListNode(sum);
+        insert(head,tail,temp);
+        carry = sum/10;
+    }
+
+    return head;
+} 
+
+void insert(ListNode* &head , ListNode* &tail, ListNode* &temp){
+
+    if(head == NULL){
+        head = temp;
+        tail = temp;
+        return;
+    }
+    tail-> next = temp;
+    tail = temp;
+}
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+
+        ListNode* ans = sum(l1,l2);
+        return ans;
+    }
+};
+
+
+
+# QUESTION 79:- Delete Node in a Linked List
+# DESCRIPTION:- There is a singly-linked list head and we want to delete a node node in it.
+You are given the node to be deleted node. You will not be given access to the first node of head.
+All the values of the linked list are unique, and it is guaranteed that the given node node is not the last node in the linked list.
+Delete the given node. Note that by deleting the node, we do not mean removing it from memory. We mean:
+The value of the given node should not exist in the linked list.
+The number of nodes in the linked list should decrease by one.
+All the values before node should be in the same order.
+All the values after node should be in the same order.
+
+Custom testing:
+For the input, you should provide the entire linked list head and the node to be given node. node should not be the last node of the list and should be an actual node in the list.
+We will build the linked list and pass the node to your function.
+The output will be the entire list after calling your function.
+
+# EXAMPLE1:-
+  Input: head = [4,5,1,9], node = 5
+  Output: [4,1,9]
+  Explanation: You are given the second node with value 5, the linked list should become 4 -> 1 -> 9 after calling your function.
+
+# Example 2:
+  Input: head = [4,5,1,9], node = 1
+  Output: [4,5,9]
+  Explanation: You are given the third node with value 1, the linked list should become 4 -> 5 -> 9 after calling your function.
+
+# SOLUTION 79:- 
+lass Solution {
+public:
+    void deleteNode(ListNode* node) {
+        node-> val = node-> next-> val;
+        node-> next = node-> next-> next;
+    }
+};
