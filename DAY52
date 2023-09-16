@@ -1,0 +1,41 @@
+# QUESTION 85:- Remove Linked List Elements
+# DESCRIPTION:- Given the head of a linked list and an integer val, remove all the nodes of the linked list that has Node.val == val, and return the new head.
+
+# EXAMPLE1:-
+  Input: head = [1,2,6,3,4,5,6], val = 6
+  Output: [1,2,3,4,5]
+
+# Example 2:
+  Input: head = [], val = 1
+  Output: []
+
+# SOLUTION 85:- 
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        ListNode* current = head;
+        ListNode* temp = NULL;
+        ListNode* temp2 = temp;
+
+        while(current != NULL){
+            if(current -> val != val){
+                cout << current->val << " ";
+                if(temp == NULL){
+                    temp = current;
+                    temp2 = temp;
+                }
+                else{
+                    temp->next = current;
+                    temp = current;
+                }
+            }
+            current = current -> next;
+        }
+
+        if(temp != NULL){
+            temp -> next = NULL;
+        }
+
+        return temp2 ;
+    }
+};
