@@ -1,4 +1,4 @@
-# QUESTION 86:- Remove Nth Node From End of List
+# QUESTION 87:- Remove Nth Node From End of List
 # DESCRIPTION:- Given the head of a linked list, remove the nth node from the end of the list and return its head.
 
 # EXAMPLE1:-
@@ -9,7 +9,7 @@
   Input: head = [1], n = 1
   Output: []
 
-# SOLUTION 86:- 
+# SOLUTION 87:- 
 class Solution {
 public:
 int getLength(ListNode* head){
