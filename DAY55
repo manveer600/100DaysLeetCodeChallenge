@@ -1,0 +1,97 @@
+# QUESTION 88:- Merge k Sorted Lists
+# DESCRIPTION:- You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
+Merge all the linked-lists into one sorted linked-list and return it.
+
+# EXAMPLE1:-
+  Input: lists = [[1,4,5],[1,3,4],[2,6]]
+  Output: [1,1,2,3,4,4,5,6]
+  Explanation: The linked-lists are:
+  [
+    1->4->5,
+    1->3->4,
+    2->6
+  ]
+  merging them into one sorted list:
+  1->1->2->3->4->4->5->6
+
+# Example 2:
+  Input: lists = []
+  Output: []
+
+# SOLUTION 88:- 
+class Solution {
+public:
+ListNode* sortList(ListNode* head) {
+        if (!head || !head->next)
+            return head;
+        
+        ListNode* mid = findMiddle(head);
+        ListNode* left = head;
+        ListNode* right = mid->next;
+        mid->next = nullptr;
+        
+        ListNode* sortedLeft = sortList(left);
+        ListNode* sortedRight = sortList(right);
+        
+        return merge(sortedLeft, sortedRight);
+    }
+    
+    ListNode* findMiddle(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (fast->next && fast->next->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow;
+    }
+    
+    ListNode* merge(ListNode* l1, ListNode* l2) {
+        ListNode* dummy = new ListNode(0);
+        ListNode* current = dummy;
+        
+        while (l1 && l2) {
+            if (l1->val < l2->val) {
+                current->next = l1;
+                l1 = l1->next;
+            } else {
+                current->next = l2;
+                l2 = l2->next;
+            }
+            current = current->next;
+        }
+        
+        if (l1)
+            current->next = l1;
+        if (l2)
+            current->next = l2;
+        
+        ListNode* sortedList = dummy->next;
+        delete dummy;
+        return sortedList;
+    }
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        ListNode* head = NULL;
+        vector<ListNode*> ans; 
+        ListNode* temp = head;
+        for(int i = 0; i < lists.size(); i++){
+            ListNode* p = lists[i];
+            while(p != NULL){
+                if(head == NULL){
+                    head = p;
+                    temp = head;
+                }else if(head != NULL){
+                    head -> next = p;
+                    head = head-> next;
+                }
+
+                p = p->next;
+            }
+        }
+
+
+        ListNode* current = temp;
+    
+        return sortList(current);
+    }
+};
