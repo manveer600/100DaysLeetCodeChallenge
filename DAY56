@@ -1,0 +1,99 @@
+# QUESTION 89:- Rotate List.
+# DESCRIPTION:- Given the head of a linked list, rotate the list to the right by k places.
+
+# EXAMPLE1:-
+  Input: head = [1,2,3,4,5], k = 2
+  Output: [4,5,1,2,3]
+
+# Example 2:
+  Input: head = [0,1,2], k = 4
+  Output: [2,0,1]
+
+# SOLUTION 89:- 
+class Solution {
+public:
+int getLength(ListNode* head){
+    ListNode* current = head;
+    int count = 0;
+    while(current != NULL){
+        current = current -> next;
+        count++;
+    }
+    return count;
+}
+
+ListNode* rotateRight(ListNode* head, int k) {
+        if(!head){
+            return 0;
+        }
+
+        if(head -> next == NULL){
+            return head;
+        }
+        
+        int length = getLength(head);
+        cout << "Length:"<< length << endl;
+        int stop = abs(length - (k%length));
+        cout << "stop:" << stop << endl ;
+        if(stop == length){
+            return head;
+        }
+        int count = 0;
+        ListNode* current = head;
+        ListNode* forward = NULL;
+        ListNode* prev = NULL;
+        
+        while(current != NULL && count < stop){
+            forward = current -> next;
+            prev = current;
+            current = current -> next;
+            count++;
+        }
+
+        prev -> next = NULL;
+        
+        ListNode* start = forward;
+        while(forward->next != NULL){
+            forward = forward->next;
+        }
+
+        forward-> next = head;
+        return start;
+
+    }
+};
+  
+# ALTERNATIVELY
+
+class Solution {
+public:
+ListNode* rotateRight(ListNode* head, int k) {
+        vector<ListNode*>v;
+        ListNode* current = head;
+        if(!head){
+            return 0;
+        }
+        while(current != NULL){
+            v.push_back(current);
+            current = current->next;
+        }
+
+        int size = v.size();
+        vector<ListNode*>ans(size);
+        for(int i = 0; i < v.size(); i++){
+            ans[(i+k)%size] = v[i];
+        }
+
+       for(int i = 0; i < ans.size(); i++){
+           cout << ans[i]->val << " ";
+       }
+        ListNode* temp = ans[0];
+        ListNode* mainAns = temp;
+        for(int i = 0; i < ans.size()-1; i++){
+           temp->next = ans[i+1];
+           temp = temp -> next;
+        }
+        temp->next = NULL;
+        return mainAns;
+    }
+};
