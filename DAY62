@@ -1,0 +1,114 @@
+# QUESTION 95:- Contains Duplicate II
+# DESCRIPTION:- Given an integer array nums and an integer k, return true if there are two distinct indices i and j in the array such that nums[i] == nums[j] and abs(i - j) <= k.
+# EXAMPLE1:
+  Input: nums = [1,2,3,1], k = 3
+  Output: true
+
+# Example 2:
+  Input: nums = [1,0,1,1], k = 1
+  Output: true
+
+# SOLUTION 95:- 
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        unordered_map<int,int > map;
+
+        for(int i = 0; i < nums.size(); i++){
+           if(map.find(nums[i]) != map.end()){
+               if(abs(map[nums[i]] - i) <= k){
+                   return true;
+               }
+           }
+
+           map[nums[i]] = i;
+        }
+
+        return false;
+    }
+};
+
+
+
+# QUESTION 96:- Repeated DNA Sequences
+# DESCRIPTION:- The DNA sequence is composed of a series of nucleotides abbreviated as 'A', 'C', 'G', and 'T'.
+For example, "ACGAATTCCG" is a DNA sequence.
+When studying DNA, it is useful to identify repeated sequences within the DNA.
+Given a string s that represents a DNA sequence, return all the 10-letter-long sequences (substrings) that occur more than once in a DNA molecule. You may return the answer in any order.
+# EXAMPLE1:
+  Input: s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT"
+  Output: ["AAAAACCCCC","CCCCCAAAAA"]
+
+# Example 2:
+  Input: s = "AAAAAAAAAAAAA"
+  Output: ["AAAAAAAAAA"]
+
+# SOLUTION 96:- 
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        unordered_map<string,int>map;
+
+        for(int i = 0; i < s.size(); i++){
+            if(i + 10 > s.size()){
+                break;
+            }
+
+            string newStr = s.substr(i,10);
+            map[newStr]++;
+        }
+
+        vector<string> ans;
+        for(auto j: map){
+            if(j.second >= 2){
+                ans.push_back(j.first);
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+# QUESTION 97:- Minimum Size Subarray Sum
+# DESCRIPTION:- Given an array of positive integers nums and a positive integer target, return the minimal length of a 
+subarray whose sum is greater than or equal to target. If there is no such subarray, return 0 instead.
+# EXAMPLE1:
+  Input: target = 7, nums = [2,3,1,2,4,3]
+  Output: 2
+  Explanation: The subarray [4,3] has the minimal length under the problem constraint.
+
+# Example 2:
+  Input: target = 4, nums = [1,4,4]
+  Output: 1
+
+# SOLUTION 97:- 
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        deque<int>dq;
+        int length = INT_MAX;
+        int sum = 0;
+        for(int i = 0; i < nums.size(); i++){
+            if(nums[i] == target){
+                return 1;
+            }
+
+            dq.push_back(nums[i]);
+            sum += nums[i];
+
+            while(sum >= target){
+                int size = dq.size();
+                if(size < length){
+                    length = size;
+                }
+                int front = dq.front();
+                dq.pop_front();
+                sum = sum - front;
+            }
+        }
+        
+        if(length == INT_MAX)return 0;
+        return length;
+    }
+};
