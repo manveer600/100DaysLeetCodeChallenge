@@ -1,0 +1,77 @@
+# QUESTION 100:- Given a linked list of 0s, 1s and 2s, sort it.
+# DESCRIPTION:- Given a linked list of N nodes where nodes can contain values 0s, 1s, and 2s only. The task is to segregate 0s, 1s, and 2s linked list such that all zeros segregate to head side, 2s at the end of the linked list, and 1s in the mid of 0s and 2s.
+# EXAMPLE1:
+  N = 8
+  value[] = {1,2,2,1,2,0,2,2}
+  Output: 0 1 1 2 2 2 2 2
+  Explanation: All the 0s are segregated
+  to the left end of the linked list,
+  2s to the right end of the list, and
+  1s in between.
+
+# Example 2:
+  N = 4
+  value[] = {2,2,0,1}
+  Output: 0 1 2 2
+  Explanation: After arranging all the
+  0s,1s and 2s in the given format,
+  the output will be 0 1 2 2.
+
+# SOLUTION 100:- 
+class Solution
+{
+public:
+    Node* segregate(Node* head) {
+        Node* zeroHead = nullptr;
+        Node* oneHead = nullptr;
+        Node* twoHead = nullptr;
+        Node* zeroTail = nullptr;
+        Node* oneTail = nullptr;
+        Node* twoTail = nullptr;
+
+        Node* current = head;
+
+        while (current != nullptr) {
+            if (current->data == 0) {
+                if (!zeroHead) {
+                    zeroHead = current;
+                    zeroTail = current;
+                } else {
+                    zeroTail->next = current;
+                    zeroTail = current;
+                }
+            } else if (current->data == 1) {
+                if (!oneHead) {
+                    oneHead = current;
+                    oneTail = current;
+                } else {
+                    oneTail->next = current;
+                    oneTail = current;
+                }
+            } else {
+                if (!twoHead) {
+                    twoHead = current;
+                    twoTail = current;
+                } else {
+                    twoTail->next = current;
+                    twoTail = current;
+                }
+            }
+            current = current->next;
+        }
+
+        // Connect the lists
+        if (zeroHead) {
+            zeroTail->next = oneHead ? oneHead : twoHead;
+        }
+        if (oneHead) {
+            oneTail->next = twoHead;
+        }
+        if (twoHead) {
+            twoTail->next = nullptr;
+        }
+
+        // Return the head of the '0s' list, or '1s' list, or '2s' list
+        return zeroHead ? zeroHead : (oneHead ? oneHead : twoHead);
+    }
+};
