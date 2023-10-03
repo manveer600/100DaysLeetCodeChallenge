@@ -1,0 +1,65 @@
+# QUESTION 104:- Sort List
+# DESCRIPTION:- Given the head of a linked list, return the list after sorting it in ascending order.
+# EXAMPLE1:
+  Input: head = [4,2,1,3]
+  Output: [1,2,3,4]
+
+# Example 2:
+  Input: head = [-1,5,3,4,0]
+  Output: [-1,0,3,4,5]
+
+# SOLUTION 104:- 
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        vector<int> array;
+
+        ListNode* current = head;
+        while(current != NULL){
+            array.push_back(current -> val);
+            current = current -> next;
+        }
+
+
+        sort(array.begin(), array.end());
+
+        ListNode* temp = new ListNode(0);
+        ListNode* ans = temp;
+        for(int i = 0; i < array.size(); i++){
+            ListNode* newNode = new ListNode(array[i]);
+            temp -> next = newNode;
+            temp = temp -> next;
+        }
+
+        return ans -> next;
+    }
+};
+
+### QUESTION 105:- Remove Duplicates from Sorted List II
+# DESCRIPTION:- Given the head of a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list. Return the linked list sorted as well.
+# EXAMPLE1:
+  Input: head = [1,2,3,3,4,4,5]
+  Output: [1,2,5]
+
+# Example 2:
+  Input: head = [1,1,1,2,3]
+  Output: [2,3]
+
+# SOLUTION 105:- 
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        ListNode* current = head;
+        while(current != NULL){
+            ListNode* forward = current -> next;
+            prev = current;
+            if(forward-> val != current -> val){
+                current = current -> next;
+            }
+            while(forward -> val == current -> val){
+                forward = forward -> next;
+            }
+            current = current -> next;
+        }
+    }
+};
