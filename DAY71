@@ -1,0 +1,77 @@
+# QUESTION 107:- Average of Levels in Binary Tree
+# DESCRIPTION:- Given the root of a binary tree, return the average value of the nodes on each level in the form of an array. Answers within 10-5 of the actual answer will be accepted.
+# EXAMPLE1:
+  Input: root = [3,9,20,null,null,15,7]
+  Output: [3.00000,14.50000,11.00000]
+  Explanation: The average value of nodes on level 0 is 3, on level 1 is 14.5, and on level 2 is 11.
+  Hence return [3, 14.5, 11].
+
+# Example 2:
+  Input: root = [3,9,20,15,7]
+  Output: [3.00000,14.50000,11.00000]
+
+# SOLUTION 107:- 
+class Solution {
+public:
+    vector<double> averageOfLevels(TreeNode* root) {
+        vector<double>ans;
+        queue<TreeNode*> q;
+        q.push(root);
+        if(root == NULL){
+            return ans;
+        }
+        while(!q.empty()){
+            int s = q.size();
+            long long sum = 0;
+            for(int i = 0; i < s; i++){
+                TreeNode* front = q.front();
+                int value = front->val;
+                sum += value;
+                q.pop();
+
+                if(front -> left) q.push(front->left);
+                if(front -> right) q.push(front -> right);
+            }
+            double avg = (double)sum / s;
+            ans.push_back(avg);
+        }
+        return ans;
+    }
+};
+
+
+# QUESTION 108:- Binary Tree Level Order Traversal
+# DESCRIPTION:-Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).
+# EXAMPLE1:
+  Input: root = [3,9,20,null,null,15,7]
+  Output: [[3],[9,20],[15,7]]
+
+# Example 2:
+  Input: root = [1]
+  Output: [[1]]
+
+# SOLUTION 108:- 
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+       queue<TreeNode*> q;
+       q.push(root);
+        vector<vector<int> >mainAns;
+        if(root == NULL){
+            return mainAns;
+        }
+       while(!q.empty()){
+           int s = q.size();
+           vector<int> ans;
+           for(int i = 0; i < s; i++){
+               TreeNode* front = q.front();
+               ans.push_back(front->val);
+               q.pop();
+               if(front -> left) q.push(front -> left);
+               if(front -> right) q.push(front -> right);
+           }
+            mainAns.push_back(ans);
+       }
+       return mainAns;
+    }
+};
