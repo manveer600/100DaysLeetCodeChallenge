@@ -1,0 +1,41 @@
+# QUESTION 115:- Kth Smallest Element in a BST
+# DESCRIPTION:- Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.
+
+# EXAMPLE1:
+  Input: root = [3,1,4,null,2], k = 1
+  Output: 1
+
+# Example 2:
+  Input: root = [5,3,6,2,4,null,null,1], k = 3
+  Output: 3
+ 
+# SOLUTION 115:- 
+class Solution {
+public:
+void preorder(TreeNode* root, vector<int>& array){
+    if(root == NULL) return ;
+
+    array.push_back(root->val);
+    preorder(root -> left, array);
+    preorder(root -> right, array);
+}
+    int kthSmallest(TreeNode* root, int k) {
+        priority_queue<int>pq;
+        vector<int> array;
+        TreeNode* current = root;
+        preorder(root, array);
+
+        for(int i = 0; i < k ; i++){
+            pq.push(array[i]);
+        }
+
+        for(int i = k; i < array.size(); i++){
+            if(array[i] < pq.top()){
+                pq.pop();
+                pq.push(array[i]);
+            }
+        }
+
+        return pq.top();
+    }
+};
