@@ -1,0 +1,151 @@
+# QUESTION 119:- Diameter of Binary Tree
+# DESCRIPTION:- Given the root of a binary tree, return the length of the diameter of the tree.
+The diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root.
+The length of a path between two nodes is represented by the number of edges between them.
+
+# EXAMPLE1:
+  Input: root = [1,2,3,4,5]
+  Output: 3
+  Explanation: 3 is the length of the path [4,2,1,3] or [5,2,1,3].
+      
+# Example 2:
+  Input: root = [1,2]
+  Output: 1
+ 
+# SOLUTION 119:- 
+class Solution {
+public:
+int height(TreeNode* root){
+    if(root == NULL) return 0;
+    int left = height(root -> left);
+    int right = height(root -> right);
+
+    return max(left, right)+1;
+}
+    int diameterOfBinaryTree(TreeNode* root) {
+        
+        // base case
+        if(root == NULL) return 0;
+
+        int left = diameterOfBinaryTree(root -> left);
+        int right = diameterOfBinaryTree(root -> right);
+        int both = height(root -> left)+height(root -> right);
+
+        return max(left,max(both,right));
+    } 
+};
+
+
+
+# QUESTION 120:- Invert Binary Tree
+# DESCRIPTION:- Given the root of a binary tree, invert the tree, and return its root.
+
+# EXAMPLE1:
+  Input: root = [4,2,7,1,3,6,9]
+  Output: [4,7,2,9,6,3,1]
+
+# Example 2:
+  Input: root = [2,1,3]
+  Output: [2,3,1]
+ 
+# SOLUTION 120:- 
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        TreeNode* ans = root ;
+        if(root == NULL){
+            return ans;
+        }
+
+        TreeNode* right = root -> right;
+        root -> right = root -> left;
+        root -> left = right;
+
+        invertTree(root -> left);
+        invertTree(root -> right);
+
+        return ans;
+    }
+};
+
+
+
+# QUESTION 121:- Convert Sorted Array to Binary Search Tree
+# DESCRIPTION:- Given an integer array nums where the elements are sorted in ascending order, convert it to a height-balanced binary search tree.
+
+# EXAMPLE1:
+  Input: nums = [-10,-3,0,5,9]
+  Output: [0,-3,9,-10,null,5]
+  Explanation: [0,-10,5,null,-3,null,9] is also accepted
+
+# Example 2:
+  Input: nums = [1,3]
+  Output: [3,1]
+  Explanation: [1,null,3] and [3,1] are both height-balanced BSTs.
+ 
+# SOLUTION 121:- 
+class Solution {
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        if(nums.size() == 0) return NULL;
+        if(nums.size() == 1) {
+            TreeNode* temp = new TreeNode(nums[0]);
+            return temp;
+        }
+        int middle = nums.size()/2;
+        TreeNode* root = new TreeNode(nums[middle]);
+
+        vector<int> leftSubtree(nums.begin(), nums.begin()+middle);
+
+        vector<int> rightSubtree(nums.begin()+middle+1, nums.end());
+        
+        root -> left = sortedArrayToBST(leftSubtree);
+        root -> right = sortedArrayToBST(rightSubtree);
+
+        return root;
+    }
+};
+
+
+
+# QUESTION 122:- Flatten Binary Tree to Linked List
+# DESCRIPTION:- Given the root of a binary tree, flatten the tree into a "linked list":
+The "linked list" should use the same TreeNode class where the right child pointer points to the next node in the list and the left child pointer is always null.
+The "linked list" should be in the same order as a pre-order traversal of the binary tree.
+ 
+# EXAMPLE1:
+  Input: root = [1,2,5,3,4,null,6]
+  Output: [1,null,2,null,3,null,4,null,5,null,6]
+
+# Example2:
+  Input: root = []
+  Output: []
+
+# SOLUTION 122:- 
+class Solution {
+public:
+void preorder(TreeNode* root, queue<TreeNode*> &q){
+    if(root == NULL) return;
+
+    q.push(root);
+    preorder(root -> left, q);
+    preorder(root -> right, q);
+}
+    void flatten(TreeNode* root) {
+        
+        if(root == NULL) return;
+        queue<TreeNode*> q;
+        preorder(root, q);
+        
+
+        TreeNode* front = q.front();
+        q.pop();
+        
+        while(!q.empty()){
+            front -> left = NULL;
+            front -> right = q.front();
+            front = q.front();
+            q.pop();
+        }
+    }
+};
