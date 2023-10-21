@@ -1,0 +1,31 @@
+# QUESTION 129:- Same Tree
+# DESCRIPTION:- Given the roots of two binary trees p and q, write a function to check if they are the same or not.
+Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.
+
+# EXAMPLE1:
+  Input: p = [1,2,3], q = [1,2,3]
+  Output: true
+
+# Example2:
+  Input: p = [1,2], q = [1,null,2]
+  Output: false
+   
+# SOLUTION 129:- 
+
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if(p == NULL && q == NULL) return true;
+        
+        if(p != NULL && q != NULL && p->val  == q-> val ){
+            bool left = isSameTree(p -> left, q-> left);
+            bool right = isSameTree(p -> right, q-> right);
+
+            return left && right;
+        }
+
+        else{
+            return false;
+        }
+    }
+};
