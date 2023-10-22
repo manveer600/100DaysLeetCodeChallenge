@@ -1,0 +1,69 @@
+# QUESTION 131:- Recover Binary Search Tree
+# DESCRIPTION:- You are given the root of a binary search tree (BST), where the values of exactly two nodes of the tree were swapped by mistake. Recover the tree without changing its structure.
+# EXAMPLE1:
+  Input: root = [1,3,null,null,2]
+  Output: [3,1,null,null,2]
+  Explanation: 3 cannot be a left child of 1 because 3 > 1. Swapping 1 and 3 makes the BST valid.
+
+# Example2:
+  Input: root = [3,1,4,null,null,2]
+  Output: [2,1,4,null,null,3]
+  Explanation: 2 cannot be in the right subtree of 3 because 2 < 3. Swapping 2 and 3 makes the BST valid.
+   
+     
+# SOLUTION 131:- 
+class Solution {
+public:
+void inorder(TreeNode* root, TreeNode *&prev, TreeNode *&first ,TreeNode *&second){
+    
+    if(root == NULL) return ;
+
+    inorder(root -> left, prev, first, second);
+    if(prev != NULL){
+        if(root -> val < prev-> val){
+            if(!first){
+                first = prev;
+            }
+            second = root;
+        }
+    }
+    prev = root;
+    inorder(root -> right, prev, first, second);
+
+}
+    void recoverTree(TreeNode* root) {
+        TreeNode *prev = NULL, *first = NULL, *second = NULL;
+        inorder(root, prev, first, second);
+
+        swap(first->val, second-> val);
+        return;
+    }
+};
+
+# QUESTION 132:- Unique Binary Search Trees
+# DESCRIPTION:- Given an integer n, return the number of structurally unique BST's (binary search trees) which has exactly n nodes of unique values from 1 to n.
+ 
+# EXAMPLE1:
+  Input: n = 3
+  Output: 5
+
+# Example2:
+  Input: n = 1
+  Output: 1
+  
+# SOLUTION 132:- 
+class Solution {
+public:
+    int numTrees(int n) {
+        if(n == 0 || n == 1){
+            return 1;
+        }
+
+        int ans = 0;
+        for(int i = 1; i <= n; i++){
+            ans += numTrees(i-1) * numTrees(n-i); 
+        }
+
+        return ans;
+    }
+};
