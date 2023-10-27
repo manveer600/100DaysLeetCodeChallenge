@@ -1,0 +1,94 @@
+# QUESTION 138:- Count Complete Tree Nodes
+# DESCRIPTION:- Given the root of a complete binary tree, return the number of the nodes in the tree.
+According to Wikipedia, every level, except possibly the last, is completely filled in a complete binary tree, and all nodes in the last level are as far left as possible. It can have between 1 and 2h nodes inclusive at the last level h.
+Design an algorithm that runs in less than O(n) time complexity.
+
+# EXAMPLE1:
+  Input: root = [1,2,3,4,5,6]
+  Output: 6
+
+# Example2:
+  Input: root = []
+  Output: 0
+ 
+# SOLUTION 138:- 
+class Solution {
+public:
+int count(TreeNode* root){
+    if(root == NULL){
+        return 0;
+    }
+
+    int left = count(root-> left);
+    int right = count(root -> right);
+
+    return left+right+1;
+}
+    int countNodes(TreeNode* root) {
+        return count(root);
+    }
+};
+
+
+# QUESTION 139:- Lowest Common Ancestor of a Binary Search Tree
+# DESCRIPTION:- Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST.
+According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).”
+
+# EXAMPLE1:
+  Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+  Output: 6
+  Explanation: The LCA of nodes 2 and 8 is 6.
+
+# Example2:
+  Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+  Output: 2
+  Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant of itself according to the LCA definition.
+   
+# SOLUTION 139:- 
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        // if(root == NULL) return NULL;
+
+        // if(root == p){
+        //     return root;
+        // }
+
+
+        // TreeNode* left = lowestCommonAncestor(root -> left, p, q);
+        // TreeNode* right = lowestCommonAncestor(root -> right,p , q);
+    
+        // if(left && right) return root;
+
+        // if(left && right == NULL){
+        //     return left;
+        // }
+
+        // else{
+        //     return right;
+        // }
+        // return root;
+
+
+
+            // OR
+
+    if (root == NULL) return NULL;
+    if(root == p || root == q){
+        return root;
+    }
+    if (root->val > p->val && root->val > q->val) {
+        // Both p and q are in the left subtree.
+        return lowestCommonAncestor(root->left, p, q);
+    } else if (root->val < p->val && root->val < q->val) {
+        // Both p and q are in the right subtree.
+        return lowestCommonAncestor(root->right, p, q);
+    } else {
+        // The current node is the lowest common ancestor.
+        return root;
+    }
+
+
+    }
+};
