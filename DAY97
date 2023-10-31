@@ -1,0 +1,43 @@
+# QUESTION 143:- Maximum Width of Binary Tree
+# DESCRIPTION:- Given the root of a binary tree, return the maximum width of the given tree.
+The maximum width of a tree is the maximum width among all levels.
+The width of one level is defined as the length between the end-nodes (the leftmost and rightmost non-null nodes), where the null nodes between the end-nodes that would be present in a complete binary tree extending down to that level are also counted into the length calculation.
+It is guaranteed that the answer will in the range of a 32-bit signed integer.
+ 
+# EXAMPLE1:
+    Input: root = [1,3,2,5,3,null,9]
+    Output: 4
+    Explanation: The maximum width exists in the third level with length 4 (5,3,null,9).
+
+# Example2:
+    Input: root = [1,3,2,5,null,null,9,6,null,7]
+    Output: 7
+    Explanation: The maximum width exists in the fourth level with length 7 (6,null,null,null,null,null,7).
+
+# SOLUTION 143:- 
+class Solution {
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        if (!root) return 0;
+        unsigned long long ans = 1;
+        queue<pair<TreeNode*, unsigned long long>> q;
+        pair<TreeNode*, unsigned long long> firstPair = make_pair(root, 0);
+        q.push(firstPair);
+
+        while (!q.empty()) {
+            unsigned long long size = q.size();
+            unsigned long long start = q.front().second;
+            unsigned long long end = q.back().second;
+            ans = max(ans, end - start + 1);
+            for (unsigned long long i = 0; i < size; i++) {
+                TreeNode* front = q.front().first;
+                unsigned long long index = q.front().second;
+                q.pop();
+                if (front->left) q.push(make_pair(front->left, 2 * index + 1));
+                if (front->right) q.push(make_pair(front->right, 2 * index + 2));
+            }
+        }
+
+        return static_cast<int>(ans);
+    }
+};
