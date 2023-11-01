@@ -1,0 +1,51 @@
+# QUESTION 144:- Find Mode in Binary Search Tree
+# DESCRIPTION:- Given the root of a binary search tree (BST) with duplicates, return all the mode(s) (i.e., the most frequently occurred element) in it.
+If the tree has more than one mode, return them in any order.
+Assume a BST is defined as follows:
+The left subtree of a node contains only nodes with keys less than or equal to the node's key.
+The right subtree of a node contains only nodes with keys greater than or equal to the node's key.
+Both the left and right subtrees must also be binary search trees.
+
+# EXAMPLE1:
+  Input: root = [1,null,2,2]
+  Output: [2]
+
+# Example2:
+    Input: root = [0]
+    Output: [0]
+
+# SOLUTION 144:- 
+class Solution {
+public:
+TreeNode* prev = NULL;
+int count = 1;
+int maxCount = 0;
+void solve(TreeNode* root, vector<int>& modes){
+    if(root == NULL) return;
+    solve(root -> left, modes);
+    if(prev){
+        if(prev-> val == root -> val){
+            count++;
+        }
+        else{
+            count = 1;
+        }
+    }
+
+    if(count > maxCount){
+        modes.clear();
+        modes.push_back(root -> val);
+        maxCount = count;
+    }
+    else if(maxCount == count){
+        modes.push_back(root -> val);
+    }
+    prev = root;
+    solve(root -> right, modes);
+}
+    vector<int> findMode(TreeNode* root) {
+        vector<int> modes;
+        solve(root , modes);
+        return modes;
+    }
+};
