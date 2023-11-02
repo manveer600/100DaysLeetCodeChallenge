@@ -1,0 +1,41 @@
+# QUESTION 145:- Second Minimum Node In a Binary Tree
+# DESCRIPTION:- Given a non-empty special binary tree consisting of nodes with the non-negative value, where each node in this tree has exactly two or zero sub-node. If the node has two sub-nodes, then this node's value is the smaller value among its two sub-nodes. More formally, the property root.val = min(root.left.val, root.right.val) always holds.
+Given such a binary tree, you need to output the second minimum value in the set made of all the nodes' value in the whole tree.
+If no such second minimum value exists, output -1 instead.
+
+# EXAMPLE1:
+  Input: root = [2,2,5,null,null,5,7]
+  Output: 5
+  Explanation: The smallest value is 2, the second smallest value is 5.
+
+# Example2:
+   Input: root = [2,2,2]
+   Output: -1
+   Explanation: The smallest value is 2, but there isn't any second smallest value.
+
+# SOLUTION 145:- 
+class Solution {
+public:
+    int solve(TreeNode* root, int parentVal) {
+        if (!root) return -1; // No second minimum value found
+
+        if (root->val > parentVal && parentVal != -1) {
+            return root->val;
+        }
+
+        int left = solve(root->left, root->val);
+        int right = solve(root->right, root->val);
+
+        if (left != -1 && right != -1) {
+            return min(left, right);
+        } else if (left != -1) {
+            return left;
+        } else {
+            return right;
+        }
+    }
+
+    int findSecondMinimumValue(TreeNode* root) {
+        return solve(root, -1);
+    }
+};
